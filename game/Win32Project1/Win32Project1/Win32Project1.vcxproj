@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bar.cpp" />
+    <ClCompile Include="BarLine.cpp" />
     <ClCompile Include="BMSParser.cpp" />
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="EventBar.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Array.h" />
     <ClInclude Include="Bar.h" />
+    <ClInclude Include="BarLine.h" />
     <ClInclude Include="BMSParser.h" />
     <ClInclude Include="DLinkedList.h" />
     <ClInclude Include="EffectManager.h" />

@@ -7,6 +7,7 @@
 #include "GameSystem.h"
 #include "Track.h"
 #include "Bar.h"
+#include "BarLine.h"
 #include "Note.h"
 
 #include "ResourceManager.h"
@@ -18,37 +19,24 @@ Bar::Bar(Array<NoteData*>* noteDataList)
 	_noteDataList = noteDataList;
 	_wavList = GameSystem::GetInstance()->GetWavListMap();
 	_bmpList = GameSystem::GetInstance()->GetBmpListMap();
-	//_barLineSprite = NULL;
 }
 
 Bar::~Bar()
 {
-	/*if (NULL != _barLineSprite)
-	{
-		delete _barLineSprite;
-		_barLineSprite = NULL;
-	}*/
+	
 }
 
 void Bar::Init(int x)
 {
-	_barXposition = x;
 	float totalPlayingSec = GameSystem::GetInstance()->GetTotalPlayingTime() / 1000.0f;
 	float barCount = GameSystem::GetInstance()->GetBarCount();
-	int oneBarHeight = GameSystem::GetInstance()->GetWindowHeight();
 	float barPerSec = GameSystem::GetInstance()->GetBarPerSec();
 
 	// 바 갯수만큼 반복  // 각 bar 높이는 전체 높이에서 갯수만큼 나눔
 	for (int i = 0; i < barCount; i++)
 	{
-		/*_barLineSprite = new Sprite("barlinespr", true);
-		_barLineSprite->SetPosition(_barXposition, (i * oneBarHeight));
-		_barLineList.Append(_barLineSprite);
-		
-		_updateDuration = GameSystem::GetInstance()->GetTotalPlayingTime() - ((i * barPerSec) * 1000);
-		
-		UpdatePosition(0);
-		*/
+		BarLine* line = new BarLine(x, i);
+		_barLineList.Append(line);
 
 		float barNum = _noteDataList->Get(i)->GetBarNum();				
 		int beatSize = _noteDataList->Get(i)->GetBeatList()->Size();
@@ -56,19 +44,19 @@ void Bar::Init(int x)
 
 		if (i == (int)barNum)
 		{
-			for (int x = 0; x < beatSize; x++)
+			for (int beat_i = 0; beat_i < beatSize; beat_i++)
 			{
-				std::string noteNum = _noteDataList->Get(i)->GetBeatList()->Get(x);
+				std::string noteNum = _noteDataList->Get(i)->GetBeatList()->Get(beat_i);
 				if (0 != noteNum.compare("00") && 0 != noteNum.compare(""))
 				{ // 읽은 노트의 번호가 00이 아닐 떄
-					judgeSec = (((float)x / (float)beatSize) * barPerSec) + ((float)i * barPerSec);
+					judgeSec = (((float)beat_i / (float)beatSize) * barPerSec) + ((float)i * barPerSec);
 
 					// #00119:00TX0000 -> barNum:1.000f, beatSize:4, noteNum:TX
 					// judgeSec -> (1 / 4) * oneBarHeight
 					// 해당 Bar에서의 판정시간을 구함
 					// 해당 BarNum 보다 앞에있는 Bar의 전체길이도 같이 더해줘야함
 
-					Note* note = new Note(judgeSec, noteNum, _barXposition);
+					Note* note = new Note(judgeSec, noteNum, x);
 					_noteList.Append(note);
 				}
 			}
@@ -85,95 +73,88 @@ void Bar::Init(int x)
 }
 
 void Bar::Update(int deltaTime)
-{
-	/*
-	{	// Bar Line
-		UpdatePosition(deltaTime);
-
-		DLinkedListIterator<Sprite*> itr = _barLineList.GetIterator();
+{	
+	{	// barLine
+		DLinkedListIterator<BarLine*> itr = _barLineList.GetIterator();
 		for (itr.begin(); itr.valid(); itr.forth())
 		{
-			Sprite* line = itr.item();
+			BarLine* line = itr.item();
 			line->Update(deltaTime);
 		}
-	}*/
+	}
 	
-	
-	DLinkedListIterator<Note*> itr = _noteList.GetIterator();
-	for (itr.begin(); itr.valid(); itr.forth())
-	{
-		Note* note = itr.item();
-		if (note->IsLive())
+	{	// note
+		DLinkedListIterator<Note*> itr = _noteList.GetIterator();
+		for (itr.begin(); itr.valid(); itr.forth())
 		{
-			note->Update(deltaTime);
-
-
-			//// Auto 임시 테스트
-			/*if (_judgeGoodEndTick < note->GetCurrentTime() && false == note->IsPassed())
+			Note* note = itr.item();
+			if (note->IsLive())
 			{
+				note->Update(deltaTime);
+
+				//// Auto 임시 테스트
+				/*if (_judgeGoodEndTick < note->GetCurrentTime() && false == note->IsPassed())
+				{
 				note->Passed();
 				printf("Miss Effect\n");
 				GameSystem::GetInstance()->SetIsMissJudge(true);
-			}*/
+				}*/
 
-			//// Auto 임시 테스트
-			if (judgeTick < note->GetCurrentTime() && false == note->IsPassed())
-			{
-				note->Passed(); 
-				GameSystem::GetInstance()->SetIsMissJudge(true);
-				EffectSoundPlay(note);
-				note->SetLive(false);
+				//// Auto 임시 테스트
+				if (judgeTick < note->GetCurrentTime() && false == note->IsPassed())
+				{
+					note->Passed();
+					GameSystem::GetInstance()->SetIsMissJudge(true);
+					EffectSoundPlay(note);
+					note->SetLive(false);
+				}
+
 			}
-
 		}
 	}
+	
 }
 
-//void Bar::UpdatePosition(float deltaTime)
-//{
-//	_updateDuration += deltaTime;
-//
-//	float timePositionRate = (float)_updateDuration / (float)GameSystem::GetInstance()->GetTotalPlayingTime();
-//	float positionByTick = GameSystem::GetInstance()->GetBarHeight() * timePositionRate;
-//
-//	_barYposition = positionByTick - (GameSystem::GetInstance()->GetBarHeight() - GameSystem::GetInstance()->GetWindowHeight()) - GameSystem::GetInstance()->GetJudgeLineOffset();
-//
-//	_barLineSprite->SetPosition(_barXposition, _barYposition);
-//
-//	DLinkedListIterator<Sprite*> itr = _barLineList.GetIterator();
-//	for (itr.begin(); itr.valid(); itr.forth())
-//	{
-//		Sprite* line = itr.item();
-//		line->SetPosition(_barXposition, _barYposition);
-//	}
-//
-//}
 
 void Bar::Render()
 {
-	//_barLineSprite->Render();
+	{	// barLine
+		DLinkedListIterator<BarLine*> itr = _barLineList.GetIterator();
+		for (itr.begin(); itr.valid(); itr.forth())
+		{
+			BarLine* line = itr.item();
+			itr.item()->Render();
+		}
+	}
 
-	DLinkedListIterator<Note*> itr = _noteList.GetIterator();
-	for (itr.begin(); itr.valid(); itr.forth())
-	{
-	itr.item()->Render();
+	{	// note
+		DLinkedListIterator<Note*> itr = _noteList.GetIterator();
+		for (itr.begin(); itr.valid(); itr.forth())
+		{
+			itr.item()->Render();
+		}
 	}
 	
 }
 
 void Bar::Deinit()
 {
-	/*if (NULL != _barLineSprite)
-	{
-		delete _barLineSprite;
-		_barLineSprite = NULL;
-	}*/
+	{	// barLine
+		DLinkedListIterator<BarLine*> itr = _barLineList.GetIterator();
+		for (itr.begin(); itr.valid(); itr.forth())
+		{
+			delete itr.item();
+			_barLineList.Remove(itr);
+		}
+	}
 
-	DLinkedListIterator<Note*> itr = _noteList.GetIterator();
-	for (itr.begin(); itr.valid(); itr.forth())
-	{
-		delete itr.item();
-		_noteList.Remove(itr);
+	{	// note
+		DLinkedListIterator<Note*> itr = _noteList.GetIterator();
+		for (itr.begin(); itr.valid(); itr.forth())
+		{
+			delete itr.item();
+			_noteList.Remove(itr);
+		}
 	}
 }
 

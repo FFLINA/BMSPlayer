@@ -8,6 +8,7 @@
 
 class Sprite;
 class Note;
+class BarLine;
 
 class Bar
 {
@@ -21,8 +22,7 @@ private:
 	Array<NoteData*>* _noteDataList;
 	DLinkedList<Note*> _noteList;
 
-	Sprite* _barLineSprite;
-	DLinkedList<Sprite*> _barLineList;
+	DLinkedList<BarLine*> _barLineList;
 	
 	std::map<std::string, std::string> _wavList;
 	std::map<std::string, std::string> _bmpList;
@@ -48,12 +48,4 @@ public:
 	// test
 	void EffectSoundPlay(Note* note);
 
-	// update test
-public:
-	void UpdatePosition(float deltaTime);
-
-private:
-	int _updateDuration;
-	int _barXposition;
-	int _barYposition;
 };

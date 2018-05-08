@@ -117,6 +117,9 @@
     <ClCompile Include="LoadingScene.cpp">
       <Filter>소스 파일\Scene\Loading</Filter>
     </ClCompile>
+    <ClCompile Include="BarLine.cpp">
+      <Filter>소스 파일\Scene\Game\Track\Bar</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sprite.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="LoadingScene.h">
       <Filter>소스 파일\Scene\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="BarLine.h">
+      <Filter>소스 파일\Scene\Game\Track\Bar</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

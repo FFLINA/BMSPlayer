@@ -17,7 +17,6 @@ Note::Note(float judgeSec, std::string noteNum, int x)
 	_noteNumber = noteNum;
 	_judgeLineOffset = GameSystem::GetInstance()->GetJudgeLineOffset();
 
-	// 필요한 데이터
 	_isLive = true;
 
 	_totalBarHeight = GameSystem::GetInstance()->GetBarHeight();

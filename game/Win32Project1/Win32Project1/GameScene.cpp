@@ -40,21 +40,21 @@ void GameScene::Init()
 		GameSystem::GetInstance()->GetWindowHeight() / 2);
 
 	float barCount = GameSystem::GetInstance()->GetBarCount();
-	float BPM = GameSystem::GetInstance()->GetBPM();					// 160	
+	float BPM = GameSystem::GetInstance()->GetBPM();
 
-	float barPerSec = (4 * 60) / BPM;									// 1.5  //마디당 1.5초가 걸려야함
+	float barPerSec = (4 * 60) / BPM;
 	GameSystem::GetInstance()->SetBarPerSec(barPerSec);
-	float totalPlayingSec = barPerSec * barCount;						// 1.5 * 105 = 157.5 = 2분37초 정확
-	GameSystem::GetInstance()->SetTotalPlayingTime(totalPlayingSec);	// 157.5
+	float totalPlayingSec = barPerSec * barCount;		
+	GameSystem::GetInstance()->SetTotalPlayingTime(totalPlayingSec);
 	
 	float gameSpeed = 1.0f;
 
 	//bar 높이 = 윈도우 화면높이
-	int barHeight = GameSystem::GetInstance()->GetWindowHeight();		// 800
+	int barHeight = GameSystem::GetInstance()->GetWindowHeight();
 
 
 	//게임 전체 길이
-	float totalbarHeight = (float)barHeight * (float)totalPlayingSec * gameSpeed;		// 800 * 154.5 = 123,600
+	float totalbarHeight = (float)barHeight * (float)totalPlayingSec * gameSpeed;
 	GameSystem::GetInstance()->SetBarHeight(totalbarHeight);
 
 
@@ -132,7 +132,6 @@ void GameScene::Update(int deltaTime)
 	}
 	else
 	{
-		//Mix_PauseMusic();
 		SceneManager::GetInstance()->ChangeScene(eScene::SCENE_RESULT);
 	}
 }
@@ -144,10 +143,10 @@ void GameScene::Render()
 		Track* track = _trackArray->Get(i);
 		track->Render();
 	}
-	for (int i = 0; i < _eventTrackArray->Size(); i++) {
+	/*for (int i = 0; i < _eventTrackArray->Size(); i++) {
 		EventTrack* eventT = _eventTrackArray->Get(i);
 		eventT->Render();
-	}
+	}*/
 	_text->Render();
 }
 
@@ -270,7 +269,6 @@ void GameScene::NoteDataSeperate()
 		if (1 == channelType)	// 오브젝트 채널일 때
 		{
 			_seperatedTrackDataMap[trackNum]->Set(barNum, newNoteData); 
-			// 초기화할때 null_data 를 포인터로 넘겨서 이상동작 ? < 정답 / 해결
 		}
 		else  //이벤트 채널일때
 		{

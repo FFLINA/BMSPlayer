@@ -5,6 +5,8 @@
 #include "SceneManager.h"
 #include "ResourceManager.h"
 
+#include "BMSParser.h"
+
 LoadingScene::LoadingScene() 
 {
 	_waitTick = 2000;
@@ -17,12 +19,14 @@ LoadingScene::~LoadingScene()
 
 void LoadingScene::Init() 
 {
+	BMSParser* bms = new BMSParser("carnation", "carnation_right");
 
-	ResourceManager::GetInstance()->LoadWav();
 
 	_backgroundSprite = new Sprite("loadingbackgroundspr", true);
 	_backgroundSprite->SetPosition(GameSystem::GetInstance()->GetWindowWidth() / 2,
 		GameSystem::GetInstance()->GetWindowHeight() / 2);
+
+	ResourceManager::GetInstance()->LoadWav();
 
 	//_loadingText = new Font("arialbd.ttf", 30);
 }

@@ -83,11 +83,11 @@ void EventBar::Update(int deltaTime)
 
 void EventBar::Render()
 {
-	DLinkedListIterator<Note*> itr = _noteList.GetIterator();
+	/*DLinkedListIterator<Note*> itr = _noteList.GetIterator();
 	for (itr.begin(); itr.valid(); itr.forth())
 	{
 		itr.item()->Render();
-	}
+	}*/
 }
 
 void EventBar::Deinit()
@@ -102,12 +102,6 @@ void EventBar::Deinit()
 
 void EventBar::EffectSoundPlay(Note* note)
 {
-	//std::string noteWav;
-
-	//noteWav = note->GetNoteNum();
-
-	//Mix_Chunk* effectSound = ResourceManager::GetInstance()->GetWav(noteWav);
-
 	Mix_Chunk* effectSound = ResourceManager::GetInstance()->GetWav(note->GetNoteNum());
 
 	if (NULL != effectSound)
@@ -118,5 +112,4 @@ void EventBar::EffectSoundPlay(Note* note)
 	{
 		printf("Error Load Effect Wav\n");
 	}
-
 }

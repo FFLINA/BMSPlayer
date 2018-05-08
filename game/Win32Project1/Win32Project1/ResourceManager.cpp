@@ -49,6 +49,8 @@ Mix_Chunk * ResourceManager::GetWav(std::string noteWav)
 
 void ResourceManager::LoadWav()
 {
+	/*	todo : waveList 같을 시 새로로딩 안하게
+	*/
 	// wavListMap[넘버] = 내용(파일명.wav)
 	// first -> 넘버 , second -> 파일명
 	std::map<std::string, std::string> wavListMap = GameSystem::GetInstance()->GetWavListMap();

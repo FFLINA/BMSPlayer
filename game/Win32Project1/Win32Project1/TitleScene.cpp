@@ -3,7 +3,6 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
 
-#include "BMSParser.h"
 
 TitleScene::TitleScene() 
 {
@@ -16,8 +15,6 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init() 
 {
-	BMSParser* bms = new BMSParser("carnation","carnation_right");
-
 	_backgroundSprite = new Sprite("titlebackgroundspr", true);
 	_backgroundSprite->SetPosition(GameSystem::GetInstance()->GetWindowWidth() / 2,
 		GameSystem::GetInstance()->GetWindowHeight() / 2);

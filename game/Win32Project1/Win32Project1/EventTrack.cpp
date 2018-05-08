@@ -31,7 +31,7 @@ void EventTrack::Init(int x, Array<NoteData*>* seperatedData)
 
 void EventTrack::Update(int deltaTime)
 {
-	_backgroundSprite->Update(deltaTime);
+	//_backgroundSprite->Update(deltaTime);
 
 	_bar->Update(deltaTime);
 
@@ -39,9 +39,10 @@ void EventTrack::Update(int deltaTime)
 
 void EventTrack::Render()
 {
-	_backgroundSprite->Render();
+	/*_backgroundSprite->Render();
 
 	_bar->Render();
+	*/
 }
 
 void EventTrack::Deinit()
